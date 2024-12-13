@@ -12,7 +12,7 @@ const App = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:5000/predict', { symbol });
+      const response = await axios.post('http://localhost:4005/predict', { symbol });
       setPrediction(response.data.predictedPrice);
     } catch (err) {
       setError('Failed to fetch prediction. Please try again.');

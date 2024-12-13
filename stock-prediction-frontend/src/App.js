@@ -4,7 +4,7 @@ import './App.css';
 
 const App = () => {
   const [symbol, setSymbol] = useState('');
-  const [prediction, setPrediction] = useState(null);
+  const [predictions, setPredictions] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -12,10 +12,10 @@ const App = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:4005/predict', { symbol });
-      setPrediction(response.data.predictedPrice);
+      const response = await axios.post('http://localhost:4009/predict', { symbol });
+      setPredictions(response.data);
     } catch (err) {
-      setError('Failed to fetch prediction. Please try again.');
+      setError('Failed to fetch predictions. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,14 @@ const App = () => {
       <button onClick={handlePredict} disabled={loading}>
         {loading ? 'Predicting...' : 'Predict'}
       </button>
-      {prediction && <h2>Predicted Price: ${prediction.toFixed(2)}</h2>}
+      {predictions && (
+        <div>
+          <h2>Predictions:</h2>
+          <p>Next Day: ${predictions.predictedPriceNextDay.toFixed(2)}</p>
+          <p>After 15 Days: ${predictions.predictedPriceAfter15Days.toFixed(2)}</p>
+          <p>After 1 Month: ${predictions.predictedPriceAfter30Days.toFixed(2)}</p>
+        </div>
+      )}
       {error && <p className="error">{error}</p>}
     </div>
   );
